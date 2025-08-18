@@ -33,7 +33,6 @@ const find = async (req, res) => {
         const { sessionId, jid } = req.params;
         const session = (0, wa_1.getSession)(sessionId);
         const data = await session.groupMetadata(jid);
-        
         res.status(200).json(data);
     }
     catch (e) {

@@ -30,7 +30,7 @@ const SSE_MAX_QR_GENERATION = Number(process.env.SSE_MAX_QR_GENERATION || 5);
 const SESSION_CONFIG_ID = 'session-config';
 
 export async function init() {
-  initStore({ prisma, logger });
+initStore({ prisma, logger: logger as any });
   const sessions = await prisma.session.findMany({
     select: { sessionId: true, data: true },
     where: { id: { startsWith: SESSION_CONFIG_ID } },
@@ -150,9 +150,9 @@ export async function createSession(options: createSessionOptions) {
     ...socketConfig,
     auth: {
       creds: state.creds,
-      keys: makeCacheableSignalKeyStore(state.keys, logger),
+keys: makeCacheableSignalKeyStore(state.keys as any, logger as any),
     },
-    logger,
+logger: logger as any,
     shouldIgnoreJid: (jid) => isJidBroadcast(jid),
     getMessage: async (key) => {
       const data = await prisma.message.findFirst({

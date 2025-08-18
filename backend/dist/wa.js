@@ -178,7 +178,6 @@ async function createSession(options) {
     if (readIncomingMessages) {
         socket.ev.on('messages.upsert', async (m) => {
             const message = m.messages[0];
-            console.log("iki message "+ message);
             if (message.key.fromMe || m.type !== 'notify')
                 return;
             await (0, utils_1.delay)(1000);
@@ -190,7 +189,6 @@ async function createSession(options) {
     // socket.ev.on('chats.upsert', (data) => dump('chats.upsert', data));
     // socket.ev.on('contacts.update', (data) => dump('contacts.update', data));
     // socket.ev.on('groups.upsert', (data) => dump('groups.upsert', data));
-    console.log("incoming "+ readIncomingMessages);
     await shared_1.prisma.session.upsert({
         create: {
             id: configID,

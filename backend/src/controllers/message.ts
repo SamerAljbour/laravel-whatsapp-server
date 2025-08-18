@@ -91,7 +91,7 @@ export const download: RequestHandler = async (req, res) => {
       message,
       'buffer',
       {},
-      { logger, reuploadRequest: session.updateMediaMessage }
+{ logger: logger as any, reuploadRequest: session.updateMediaMessage }
     );
 
     res.setHeader('Content-Type', content.mimetype!);
