@@ -30,7 +30,7 @@ const SSE_MAX_QR_GENERATION = Number(process.env.SSE_MAX_QR_GENERATION || 5);
 const SESSION_CONFIG_ID = 'session-config';
 
 export async function init() {
-initStore({ prisma, logger: logger as any });
+  initStore({ prisma, logger: logger as any });
   const sessions = await prisma.session.findMany({
     select: { sessionId: true, data: true },
     where: { id: { startsWith: SESSION_CONFIG_ID } },
@@ -70,11 +70,10 @@ export async function createSession(options: createSessionOptions) {
     try {
       await Promise.all([
         logout && socket.logout(),
-        prisma.chat.deleteMany({ where: { sessionId } }),
-        prisma.contact.deleteMany({ where: { sessionId } }),
-        prisma.message.deleteMany({ where: { sessionId } }),
-        prisma.groupMetadata.deleteMany({ where: { sessionId } }),
-        prisma.session.deleteMany({ where: { sessionId } }),
+        shared_1.prisma.chat.deleteMany({ where: { sessionId } }),
+        shared_1.prisma.contact.deleteMany({ where: { sessionId } }),
+        shared_1.prisma.message.deleteMany({ where: { sessionId } }),
+        shared_1.prisma.session.deleteMany({ where: { sessionId } }),
       ]);
     } catch (e) {
       logger.error(e, 'An error occured during session destroy');
@@ -150,9 +149,9 @@ export async function createSession(options: createSessionOptions) {
     ...socketConfig,
     auth: {
       creds: state.creds,
-keys: makeCacheableSignalKeyStore(state.keys as any, logger as any),
+      keys: makeCacheableSignalKeyStore(state.keys as any, logger as any),
     },
-logger: logger as any,
+    logger: logger as any,
     shouldIgnoreJid: (jid) => isJidBroadcast(jid),
     getMessage: async (key) => {
       const data = await prisma.message.findFirst({

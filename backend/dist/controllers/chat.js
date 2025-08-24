@@ -11,8 +11,8 @@ const list = async (req, res) => {
             cursor: cursor ? { pkId: Number(cursor) } : undefined,
             take: Number(limit),
             skip: cursor ? 1 : 0,
-                        where: { sessionId }, // <-- FIXED
-            // syncChats.ts: { sessionId },
+            where: { sessionId }, // <-- FIXED
+            // syncChats.ts: { sessionId }, // <-- FIXED
         })).map((c) => (0, baileys_store_1.serializePrisma)(c));
         res.status(200).json({
             data: chats,

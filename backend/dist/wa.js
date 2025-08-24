@@ -1,18 +1,18 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function (o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
     if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
+        desc = { enumerable: true, get: function () { return m[k]; } };
     }
     Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
+}) : (function (o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
 }));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function (o, v) {
     Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
+}) : function (o, v) {
     o["default"] = v;
 });
 var __importStar = (this && this.__importStar) || function (mod) {
@@ -79,10 +79,10 @@ async function createSession(options) {
         try {
             await Promise.all([
                 logout && socket.logout(),
-                shared_1.prisma.chat.deleteMany({ where: { sessionId } }),
+                // shared_1.prisma.chat.deleteMany({ where: { sessionId } }),
                 shared_1.prisma.contact.deleteMany({ where: { sessionId } }),
-                shared_1.prisma.message.deleteMany({ where: { sessionId } }),
-                shared_1.prisma.groupMetadata.deleteMany({ where: { sessionId } }),
+                // shared_1.prisma.message.deleteMany({ where: { sessionId } }),
+                // // shared_1.prisma.groupMetadata.deleteMany({ where: { sessionId } }),
                 shared_1.prisma.session.deleteMany({ where: { sessionId } }),
             ]);
         }
@@ -152,7 +152,8 @@ async function createSession(options) {
     };
     const handleConnectionUpdate = SSE ? handleSSEConnectionUpdate : handleNormalConnectionUpdate;
     const { state, saveCreds } = await (0, baileys_store_1.useSession)(sessionId);
-    const socket = (0, baileys_1.default)(Object.assign(Object.assign({ printQRInTerminal: true, browser: baileys_1.Browsers.ubuntu('Chrome'), generateHighQualityLinkPreview: true }, socketConfig), { auth: {
+    const socket = (0, baileys_1.default)(Object.assign(Object.assign({ printQRInTerminal: true, browser: baileys_1.Browsers.ubuntu('Chrome'), generateHighQualityLinkPreview: true }, socketConfig), {
+        auth: {
             creds: state.creds,
             keys: (0, baileys_1.makeCacheableSignalKeyStore)(state.keys, shared_1.logger),
         }, logger: shared_1.logger, shouldIgnoreJid: (jid) => (0, baileys_1.isJidBroadcast)(jid), getMessage: async (key) => {
@@ -160,7 +161,8 @@ async function createSession(options) {
                 where: { remoteJid: key.remoteJid, id: key.id, sessionId },
             });
             return ((data === null || data === void 0 ? void 0 : data.message) || undefined);
-        } }));
+        }
+    }));
     const store = new baileys_store_1.Store(sessionId, socket.ev);
     sessions.set(sessionId, Object.assign(Object.assign({}, socket), { destroy, store }));
     socket.ev.on('creds.update', saveCreds);
